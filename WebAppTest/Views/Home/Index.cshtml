@@ -1,8 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<h1>
+	<a href="/Home/English">English</a>
+	<a href="/Home/Bulgarian">Bulgarian</a>
+</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+@if(this.Context.Request.Cookies.ContainsKey("Language")
+	&& this.Context.Request.Cookies["Language"] == "bg")
+	{
+		<h2>Страницата е на Български!</h2>
+	}
+	else
+	{
+		<h2>The web page is in English!</h2>
+	}

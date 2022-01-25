@@ -7,9 +7,14 @@ namespace WebAppTest.Controllers
        
         public IActionResult List()  // /cats/list
         {
-            //return View(); // returns html
+            var requestCookies = this.Request.Cookies;
 
-            return Redirect("/cats/search");
+            if (requestCookies.ContainsKey("Authentication") == false)
+            {
+                return Unauthorized();
+            }
+            return View(); // returns html
+            //return Redirect("/cats/search");
         }
 
         public IActionResult Details() // /cats/details
