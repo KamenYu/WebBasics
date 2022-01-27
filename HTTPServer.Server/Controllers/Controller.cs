@@ -18,6 +18,21 @@ namespace BasicWebServer.Server.Controllers
         protected Response Unauthorized() => new UnauthorizedResponse();
         protected Response NotFound() => new NotFoundResponse();
         protected Response Redirect(string location)=> new RedirectResponse(location);
-        protected Response File(string fileName) => new FileResponse(fileName);
+        protected Response FileContent(string fileName) => new FileResponse(fileName);
+
+        protected Response Html(string html, CookieCollection cookies = null)
+        {
+            var response = new HtmlResponse(html);
+
+            if (cookies != null)
+            {
+                foreach (var cookie in cookies)
+                {
+                    response.Cookies.Add(cookie.Name, cookie.Value);
+                }
+            }
+
+            return response;
+        }
     }
 }
