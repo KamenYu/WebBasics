@@ -31,7 +31,7 @@ public class StartUp
 
     public static async Task Main()
     {
-        await DownloadSitesAsTextFiles(FileName, new string[] { "https://judge.softuni.org", "https://softuni.org" });
+        //await DownloadSitesAsTextFiles(FileName, new string[] { "https://judge.softuni.org", "https://softuni.org" });
 
         var server = new HttpServer(routes => routes
         .MapGet("/", new TextResponse("Hello from the server!"))
@@ -39,7 +39,7 @@ public class StartUp
         .MapGet("/HTML", new HtmlResponse(HtmlForm))
         .MapPost("/HTML", new TextResponse("", AddFormDataAction))
         .MapGet("/Content", new HtmlResponse(DownloadForm))
-        .MapPost("/Content", new TextFileResponse(FileName))
+        .MapPost("/Content", new FileResponse(FileName))
         .MapGet("/Cookies", new HtmlResponse("", AddCookiesAction))
         .MapGet("/Session", new TextResponse("", DisplaySessionInfoAction))
         .MapGet("/Login", new HtmlResponse(LoginForm))

@@ -12,10 +12,10 @@ namespace BasicWebServer.Server.Routing
         {
             routes = new Dictionary<Method, Dictionary<string, Response>>()
             {
-                [Method.GET] = new (),
-                [Method.POST] = new (),
-                [Method.Put] = new (),
-                [Method.Delete] = new (),
+                [Method.GET] = new (StringComparer.InvariantCultureIgnoreCase),
+                [Method.POST] = new (StringComparer.InvariantCultureIgnoreCase),
+                [Method.Put] = new (StringComparer.InvariantCultureIgnoreCase),
+                [Method.Delete] = new (StringComparer.InvariantCultureIgnoreCase),
             };
         }
 
