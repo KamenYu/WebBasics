@@ -1,5 +1,7 @@
 ﻿
+using BasicWebServer.Demo.Controllers;
 using BasicWebServer.Server;
+using BasicWebServer.Server.Routing;
 using BasicWebServer.Server.HTTP;
 using BasicWebServer.Server.Responses;
 using System.Text;
@@ -33,21 +35,9 @@ public class StartUp
     {
         //await DownloadSitesAsTextFiles(FileName, new string[] { "https://judge.softuni.org", "https://softuni.org" });
 
-        var server = new HttpServer(routes => routes
-        .MapGet("/", new TextResponse("Hello from the server!"))
-        .MapGet("/Redirect", new RedirectResponse("https://softuni.org"))
-        .MapGet("/HTML", new HtmlResponse(HtmlForm))
-        .MapPost("/HTML", new TextResponse("", AddFormDataAction))
-        .MapGet("/Content", new HtmlResponse(DownloadForm))
-        .MapPost("/Content", new FileResponse(FileName))
-        .MapGet("/Cookies", new HtmlResponse("", AddCookiesAction))
-        .MapGet("/Session", new TextResponse("", DisplaySessionInfoAction))
-        .MapGet("/Login", new HtmlResponse(LoginForm))
-        .MapPost("/Login", new HtmlResponse("", LoginAction))
-        .MapGet("/Logout", new HtmlResponse("", LogoutAction))
-        .MapGet("/UserProfile", new HtmlResponse("", GetUserDataAction)));
-
-       await server.Start();
+        await new HttpServer(routes => routes
+            .MapGet<HomeController>("/", c => c.Index()))
+            .Start();
     }
 
     private static void GetUserDataAction(Request request, Response response)
@@ -66,9 +56,9 @@ public class StartUp
 
     private static void LogoutAction(Request request, Response response)
     {
-        var sessionBeforeLogout = request.Session;
+        //var sessionBeforeLogout = request.Session;
         request.Session.Clear();
-        var sessionAfterLogout = request.Session;
+        //var sessionAfterLogout = request.Session;
 
         response.Body = string.Empty;
         response.Body += "<h3>Logget out successfully!</h3>";
@@ -78,7 +68,7 @@ public class StartUp
     {
         request.Session.Clear();
 
-        var sessionBeforeLogin = request.Session;
+        //var sessionBeforeLogin = request.Session;
 
         var bodyText = string.Empty;
 
@@ -91,7 +81,7 @@ public class StartUp
             response.Cookies.Add(Session.SessionCookieName, request.Session.Id);
 
             bodyText = "<h3>Logged Successfully!</h3>";
-            var sessionAfterLogin = request.Session;
+            //var sessionAfterLogin = request.Session;
         }
         else
         {

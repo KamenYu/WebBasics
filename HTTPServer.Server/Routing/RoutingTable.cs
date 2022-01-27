@@ -6,43 +6,53 @@ namespace BasicWebServer.Server.Routing
 {
     public class RoutingTable : IRoutingTable
     {
-        private readonly Dictionary<Method, Dictionary<string, Response>> routes; // a method with url and response
+        private readonly Dictionary<Method, Dictionary<string, Func<Request,Response>>> routes; // a method with url and responseFunction
 
-        public RoutingTable()
+        public RoutingTable() => routes = new()
         {
-            routes = new Dictionary<Method, Dictionary<string, Response>>()
+
+            [Method.GET] = new(StringComparer.InvariantCultureIgnoreCase),
+            [Method.POST] = new(StringComparer.InvariantCultureIgnoreCase),
+            [Method.Put] = new(StringComparer.InvariantCultureIgnoreCase),
+            [Method.Delete] = new(StringComparer.InvariantCultureIgnoreCase),
+        };
+
+
+        public IRoutingTable Map(
+           Method method,
+           string path,
+           Func<Request, Response> responseFunction)
+        {
+            Guard.AgainstNull(path, nameof(path));
+            Guard.AgainstNull(responseFunction, nameof(responseFunction));
+
+            switch (method)
             {
-                [Method.GET] = new (StringComparer.InvariantCultureIgnoreCase),
-                [Method.POST] = new (StringComparer.InvariantCultureIgnoreCase),
-                [Method.Put] = new (StringComparer.InvariantCultureIgnoreCase),
-                [Method.Delete] = new (StringComparer.InvariantCultureIgnoreCase),
-            };
+                case Method.GET:
+                    return MapGet(path, responseFunction);
+                case Method.POST:
+                    return MapPost(path, responseFunction);
+                case Method.Put:
+                case Method.Delete:
+                default:
+                    throw new ArgumentOutOfRangeException($"The method {nameof(method)} is not supported!");
+            }
         }
 
-        public IRoutingTable Map(string url, Method method, Response response)
-            => method switch
-            {
-                Method.GET => MapGet(url, response),
-                Method.POST => MapPost(url, response),
-                _ => throw new InvalidOperationException($"Method '{method}' is not supported")
-            };
-
-        public IRoutingTable MapGet(string url, Response response)
+        private IRoutingTable MapGet(
+            string path,
+            Func<Request, Response> responseFunction)
         {
-            Guard.AgainstNull(url, nameof(url));
-            Guard.AgainstNull(response, nameof(response));
-
-            routes[Method.GET][url] = response;
+            routes[Method.GET][path] = responseFunction;
 
             return this;
         }
 
-        public IRoutingTable MapPost(string url, Response response)
+        private IRoutingTable MapPost(
+            string path,
+            Func<Request, Response> responseFunction)
         {
-            Guard.AgainstNull(url, nameof(url));
-            Guard.AgainstNull(response, nameof(response));
-
-            routes[Method.POST][url] = response;
+            routes[Method.POST][path] = responseFunction;
 
             return this;
         }
@@ -58,7 +68,9 @@ namespace BasicWebServer.Server.Routing
                 return new NotFoundResponse();
             }
 
-            return routes[requestMethod][requestUrl];
+            var responseFunction = routes[requestMethod][requestUrl];
+
+            return responseFunction(request);
         }
     }
 }

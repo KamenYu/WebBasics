@@ -49,8 +49,7 @@ namespace BasicWebServer.Server
                 var connection = await serverListener.AcceptTcpClientAsync();
 
                 _ = Task.Run(async () =>
-               {
-
+                {
                    var networkStream = connection.GetStream();
 
                    var requestText = await this.ReadRequest(networkStream);
