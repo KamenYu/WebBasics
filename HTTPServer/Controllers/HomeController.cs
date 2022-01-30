@@ -45,12 +45,7 @@ namespace BasicWebServer.Demo.Controllers
 
         public Response Content() => Html(DownloadForm);
 
-        public Response DownloadContent()
-        {
-            DownloadSitesAsTextFile(FileName, new string[] { "https://judge.softuni.org", "https://softuni.org" }).Wait();
-
-            return FileContent(FileName);
-        }
+        public Response DownloadContent() => FileContent(FileName);     
 
         public Response Cookies()
         {
@@ -90,11 +85,11 @@ namespace BasicWebServer.Demo.Controllers
         public Response Session()
         {
             string currentDateKey = "CurrentDate";
-            var sessionExists = Request.Session.ContainsKey(currentDateKey);
+            bool sessionExists = Request.Session.ContainsKey(currentDateKey);
 
             if (sessionExists)
             {
-                var currentDate = Request.Session[currentDateKey];
+                string currentDate = Request.Session[currentDateKey];
 
                 return Text($"Stored date: {currentDate}!");
             }
