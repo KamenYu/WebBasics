@@ -113,7 +113,7 @@ namespace BasicWebServer.Server.HTTP
                 .Where(part => part.Length == 2)
                 .ToDictionary(
                     part => part[0],
-                    part => part[1],                 StringComparer.InvariantCultureIgnoreCase);            
+                    part => part[1], StringComparer.InvariantCultureIgnoreCase);            
 
         private static HeaderCollection ParseHeaders(IEnumerable<string> headers)
         {

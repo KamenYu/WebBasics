@@ -1,6 +1,5 @@
 ﻿using BasicWebServer.Server.Common;
 
-
 namespace BasicWebServer.Server.HTTP
 {
     public class Cookie
