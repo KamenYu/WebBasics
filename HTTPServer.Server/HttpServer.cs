@@ -34,7 +34,6 @@ namespace BasicWebServer.Server
 
         }
 
-
         public async Task Start()
         {
             serverListener.Start();
