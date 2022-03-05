@@ -7,15 +7,15 @@ namespace Recipes.Data.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.NameMaxLength)]
+        [MaxLength(DataConstants.Ingredient.NameMaxLength)]
         public string Name { get; set; } // Rice
 
         public short? Quantity { get; set; } // 2
 
-        [MaxLength(DataConstants.MetricValueMaxLength)]
+        [MaxLength(DataConstants.Ingredient.MetricValueMaxLength)]
         public string? MetricValue { get; set; } // cups
 
-        [MaxLength(DataConstants.ExtraInformationMaxLength)]
+        [MaxLength(DataConstants.Ingredient.ExtraInformationMaxLength)]
         public string? ExtraInformation { get; set; } // rinced thoroughly
 
         public string RecipeId { get; set; }

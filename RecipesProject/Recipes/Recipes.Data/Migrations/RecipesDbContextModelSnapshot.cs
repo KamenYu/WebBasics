@@ -107,6 +107,8 @@ namespace Recipes.Data.Migrations
 
                     b.HasIndex("RecipeId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Ratings");
                 });
 
@@ -137,12 +139,7 @@ namespace Recipes.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("TotalTime")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -150,30 +147,6 @@ namespace Recipes.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("Recipes.Data.Data.Models.Tip", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("RecipeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Tips");
                 });
 
             modelBuilder.Entity("Recipes.Data.Data.Models.User", b =>
@@ -209,13 +182,13 @@ namespace Recipes.Data.Migrations
                     b.HasOne("Recipes.Data.Data.Models.Category", "Category")
                         .WithMany("CategoryRecipes")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Recipes.Data.Data.Models.Recipe", "Recipe")
                         .WithMany("CategoryRecipes")
                         .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -228,7 +201,7 @@ namespace Recipes.Data.Migrations
                     b.HasOne("Recipes.Data.Data.Models.Recipe", "Recipe")
                         .WithMany("Ingredients")
                         .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Recipe");
@@ -239,28 +212,29 @@ namespace Recipes.Data.Migrations
                     b.HasOne("Recipes.Data.Data.Models.Recipe", "Recipe")
                         .WithMany("Ratigns")
                         .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Recipes.Data.Data.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Recipe");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipes.Data.Data.Models.Recipe", b =>
                 {
-                    b.HasOne("Recipes.Data.Data.Models.User", null)
+                    b.HasOne("Recipes.Data.Data.Models.User", "User")
                         .WithMany("Recipes")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Recipes.Data.Data.Models.Tip", b =>
-                {
-                    b.HasOne("Recipes.Data.Data.Models.Recipe", "Recipe")
-                        .WithMany("Tips")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Recipe");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipes.Data.Data.Models.Category", b =>
@@ -275,12 +249,12 @@ namespace Recipes.Data.Migrations
                     b.Navigation("Ingredients");
 
                     b.Navigation("Ratigns");
-
-                    b.Navigation("Tips");
                 });
 
             modelBuilder.Entity("Recipes.Data.Data.Models.User", b =>
                 {
+                    b.Navigation("Ratings");
+
                     b.Navigation("Recipes");
                 });
 #pragma warning restore 612, 618

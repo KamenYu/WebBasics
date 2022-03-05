@@ -11,13 +11,12 @@ namespace Recipes.Data.Data
 
         }
 
-        public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryRecipe> CategoryRecipes { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Tip> Tips { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Recipe> Recipes { get; init; }
+        public DbSet<Category> Categories { get; init; }
+        public DbSet<CategoryRecipe> CategoryRecipes { get; init; }
+        public DbSet<Ingredient> Ingredients { get; init; }
+        public DbSet<Rating> Ratings { get; init; }
+        public DbSet<User> Users { get; init; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +30,13 @@ namespace Recipes.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // cascade to restrict to all entities
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
             modelBuilder.Entity<CategoryRecipe>()
                 .HasKey(k => new { k.CategoryId, k.RecipeId });
 

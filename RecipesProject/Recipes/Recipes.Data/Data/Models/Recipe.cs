@@ -7,29 +7,27 @@ namespace Recipes.Data.Data.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [MaxLength(DataConstants.RecipeNameMaxLength)]
+        [MaxLength(DataConstants.Recipe.NameMaxLength)]
         public string Name { get; set; }
 
-        [MaxLength(DataConstants.UmageUrlMaxLength)]
+        [MaxLength(DataConstants.Recipe.UmageUrlMaxLength)]
         public string? ImageUrl { get; set; }
 
-        [MaxLength(DataConstants.TimeMaxLength)]
+        [MaxLength(DataConstants.Recipe.TimeMaxLength)]
         public string? PreparationTime { get; set; }
 
-        [MaxLength(DataConstants.TimeMaxLength)]
+        [MaxLength(DataConstants.Recipe.TimeMaxLength)]
         public string? CookTime { get; set; }
 
         [Required]
-        [MaxLength(DataConstants.TimeMaxLength)]
-        public string TotalTime { get; set; }
-
-        [Required]
-        [MaxLength(DataConstants.DirectionsMaxLength)]
+        [MaxLength(DataConstants.Recipe.DirectionsMaxLength)]
         public string Directions { get; set; }
 
-        public ICollection<Rating> Ratigns { get; set; } = new List<Rating>();
+        public int UserId { get; set; }
 
-        public ICollection<Tip> Tips { get; set; } = new List<Tip>();
+        public User User { get; set; }
+
+        public ICollection<Rating> Ratigns { get; set; } = new List<Rating>();
 
         public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 
