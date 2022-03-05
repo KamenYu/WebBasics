@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Recipes.Web.Data;
+using Recipes.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
